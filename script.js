@@ -123,20 +123,20 @@ function animateParticles() {
 }
 animateParticles();
 
-// Lyrics data with precise timestamps (in seconds) matching audio track
+// Lyrics data with stretched timings so lyrics stay visible on screen much longer
 const timedLyrics = [
-    { time: 0.8, text: "You know it's true", duration: 2.2 },
-    { time: 3.8, text: "Yeah i miss you", duration: 2.4 },
-    { time: 7.0, text: "You know it's true", duration: 2.5 },
-    { time: 10.2, text: "So, What if i call?", duration: 2.4 },
-    { time: 13.2, text: "And you pick up the phone", duration: 2.8 },
-    { time: 16.5, text: "And i use this holiday", duration: 2.2 },
-    { time: 19.2, text: "To make my way to your ghost", duration: 3.5 },
-    { time: 23.2, text: "Oh, what if you're lonely?", duration: 2.8 },
-    { time: 26.5, text: "You know i am too", duration: 2.5 },
-    { time: 29.5, text: "And i get the chance to say", duration: 2.8 },
-    { time: 32.8, text: "Merry Christmas i miss you", duration: 3.8 },
-    { time: 37.2, text: "I MISS YOU", duration: 3.2 }
+    { time: 0.5, text: "You know it's true", duration: 5.0 },
+    { time: 6.0, text: "Yeah i miss you", duration: 5.0 },
+    { time: 11.5, text: "You know it's true", duration: 5.0 },
+    { time: 17.0, text: "So, What if i call?", duration: 5.0 },
+    { time: 22.5, text: "And you pick up the phone", duration: 5.5 },
+    { time: 28.5, text: "And i use this holiday", duration: 5.0 },
+    { time: 34.0, text: "To make my way to your ghost", duration: 6.0 },
+    { time: 40.5, text: "Oh, what if you're lonely?", duration: 5.5 },
+    { time: 46.5, text: "You know i am too", duration: 5.0 },
+    { time: 52.0, text: "And i get the chance to say", duration: 5.5 },
+    { time: 58.0, text: "Merry Christmas i miss you", duration: 7.0 },
+    { time: 66.0, text: "I MISS YOU", duration: 8.0 }
 ];
 
 let activeLyricIndex = -1;
