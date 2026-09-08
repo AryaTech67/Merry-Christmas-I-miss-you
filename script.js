@@ -165,15 +165,15 @@ function togglePlay() {
         playSvg.classList.add('hidden');
         pauseSvg.classList.remove('hidden');
         musicCard.classList.add('playing');
-        songStatus.textContent = 'Memutar musik & lirik...';
-
-        // Try playing audio if source exists
-        if (bgAudio.querySelector('source').src) {
-            bgAudio.play().catch(() => {
-                // Browsers may block autoplay or if file is missing, continue gracefully
-                songStatus.textContent = 'Menampilkan lirik...';
-            });
+        if (!bgAudio.src || bgAudio.src === '') {
+            bgAudio.src = 'music.mp3';
         }
+        bgAudio.play().then(() => {
+            songStatus.textContent = 'Memutar musik & lirik...';
+        }).catch((err) => {
+            console.log('Audio playback error:', err);
+            songStatus.textContent = 'Klik tombol play lagi untuk memutar';
+        });
     } else {
         playSvg.classList.remove('hidden');
         pauseSvg.classList.add('hidden');
