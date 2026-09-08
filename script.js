@@ -123,39 +123,60 @@ function animateParticles() {
 }
 animateParticles();
 
-// Typewriter Effect Logic
-function startTypewriter(index = 0) {
-    clearTimeouts();
-    if (index >= lyrics.length) {
-        cursorEl.style.display = 'none';
-        return;
-    }
+// Lyrics data with timestamp (in seconds) matching Alex Crichton - Merry Christmas I miss you
+const timedLyrics = [
+    { time: 0.5, text: "You know it's true", duration: 2.2 },
+    { time: 3.0, text: "Yeah i miss you", duration: 2.8 },
+    { time: 6.2, text: "You know it's true", duration: 2.8 },
+    { time: 9.3, text: "So, What if i call?", duration: 2.5 },
+    { time: 12.0, text: "And you pick up the phone", duration: 2.6 },
+    { time: 14.8, text: "And i use this holiday", duration: 2.0 },
+    { time: 17.0, text: "To make my way to your ghost", duration: 3.2 },
+    { time: 20.5, text: "Oh, what if you're lonely?", duration: 2.7 },
+    { time: 23.5, text: "You know i am too", duration: 2.5 },
+    { time: 26.2, text: "And i get the chance to say", duration: 2.5 },
+    { time: 29.0, text: "Merry Christmas i miss you", duration: 3.5 },
+    { time: 33.0, text: "I MISS YOU", duration: 3.0 }
+];
 
-    cursorEl.style.display = 'inline';
-    currentLyricIndex = index;
-    const item = lyrics[index];
-    let currentCharIndex = 0;
-    lyricsTextEl.textContent = '';
+let activeLyricIndex = -1;
+let charInterval = null;
 
-    function typeChar() {
-        if (currentCharIndex < item.text.length) {
-            lyricsTextEl.textContent += item.text.charAt(currentCharIndex);
-            currentCharIndex++;
-            typewriterTimeout = setTimeout(typeChar, item.charDelay * 1000);
-        } else {
-            // Line complete, wait lineDelay then move to next
-            lineTimeout = setTimeout(() => {
-                startTypewriter(index + 1);
-            }, item.lineDelay * 1000);
+function updateLyricsOnTimeUpdate() {
+    if (!isPlaying) return;
+    const currentTime = bgAudio.currentTime;
+    
+    // Find current active lyric based on audio playback position
+    let newIndex = -1;
+    for (let i = timedLyrics.length - 1; i >= 0; i--) {
+        if (currentTime >= timedLyrics[i].time) {
+            newIndex = i;
+            break;
         }
     }
 
-    typeChar();
+    if (newIndex !== activeLyricIndex && newIndex !== -1) {
+        activeLyricIndex = newIndex;
+        renderLyricItem(timedLyrics[newIndex]);
+    }
 }
 
-function clearTimeouts() {
-    if (typewriterTimeout) clearTimeout(typewriterTimeout);
-    if (lineTimeout) clearTimeout(lineTimeout);
+function renderLyricItem(item) {
+    if (charInterval) clearInterval(charInterval);
+    lyricsTextEl.textContent = '';
+    cursorEl.style.display = 'inline';
+
+    let charIdx = 0;
+    const charDelay = (item.duration / item.text.length) * 1000 * 0.7; // Typewriter speed relative to phrase duration
+
+    charInterval = setInterval(() => {
+        if (charIdx < item.text.length) {
+            lyricsTextEl.textContent += item.text.charAt(charIdx);
+            charIdx++;
+        } else {
+            clearInterval(charInterval);
+        }
+    }, charDelay);
 }
 
 // Audio & Controls Logic
@@ -166,36 +187,46 @@ function togglePlay() {
         pauseSvg.classList.remove('hidden');
         musicCard.classList.add('playing');
         
-        bgAudio.src = 'music.mp3?v=' + Date.now();
-        bgAudio.load();
-        const playPromise = bgAudio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                songStatus.textContent = 'Memutar musik & lirik...';
-            }).catch((err) => {
-                console.log('Audio playback error:', err);
-                songStatus.textContent = 'Klik tombol play lagi untuk memutar';
-            });
+        if (!bgAudio.src || bgAudio.src.includes('music.mp3') === false) {
+            bgAudio.src = 'music.mp3';
         }
+        
+        bgAudio.play().then(() => {
+            songStatus.textContent = 'Memutar musik & lirik...';
+        }).catch((err) => {
+            console.log('Audio playback error:', err);
+            songStatus.textContent = 'Klik tombol play lagi untuk memutar';
+        });
     } else {
         playSvg.classList.remove('hidden');
         pauseSvg.classList.add('hidden');
         musicCard.classList.remove('playing');
         songStatus.textContent = 'Di-pause (Klik untuk lanjut)';
         bgAudio.pause();
+        if (charInterval) clearInterval(charInterval);
     }
 }
+
+bgAudio.addEventListener('timeupdate', updateLyricsOnTimeUpdate);
+bgAudio.addEventListener('ended', () => {
+    isPlaying = false;
+    playSvg.classList.remove('hidden');
+    pauseSvg.classList.add('hidden');
+    musicCard.classList.remove('playing');
+    songStatus.textContent = 'Selesai diputar';
+    activeLyricIndex = -1;
+});
 
 playBtn.addEventListener('click', togglePlay);
 
 replayBtn.addEventListener('click', () => {
-    startTypewriter(0);
+    bgAudio.currentTime = 0;
+    activeLyricIndex = -1;
+    lyricsTextEl.textContent = '';
     if (!isPlaying) {
         togglePlay();
+    } else {
+        bgAudio.play();
     }
 });
 
-// Auto-start typewriter on page load
-window.addEventListener('DOMContentLoaded', () => {
-    startTypewriter(0);
-});
