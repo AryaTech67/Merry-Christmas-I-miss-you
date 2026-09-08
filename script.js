@@ -242,6 +242,9 @@ replayBtn.addEventListener('click', () => {
     }
 });
 
-// Set initial state: Empty text with blinking cursor line
-resetToIdleState();
+// Set initial state: Empty text with blinking cursor line only
+document.addEventListener('DOMContentLoaded', () => {
+    resetToIdleState();
+});
+
 
