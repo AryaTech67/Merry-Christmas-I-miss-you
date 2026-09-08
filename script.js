@@ -125,49 +125,62 @@ animateParticles();
 
 // Lyrics data with precise timestamps (in seconds) matching audio track
 const timedLyrics = [
-    { time: 0.1, text: "You know it's true", duration: 1.8 },
-    { time: 2.2, text: "Yeah i miss you", duration: 2.2 },
-    { time: 4.8, text: "You know it's true", duration: 2.2 },
-    { time: 7.2, text: "So, What if i call?", duration: 2.2 },
-    { time: 9.8, text: "And you pick up the phone", duration: 2.2 },
-    { time: 12.2, text: "And i use this holiday", duration: 1.8 },
-    { time: 14.2, text: "To make my way to your ghost", duration: 2.8 },
-    { time: 17.2, text: "Oh, what if you're lonely?", duration: 2.2 },
-    { time: 19.8, text: "You know i am too", duration: 2.0 },
-    { time: 22.0, text: "And i get the chance to say", duration: 2.2 },
-    { time: 24.5, text: "Merry Christmas i miss you", duration: 3.0 },
-    { time: 28.0, text: "I MISS YOU", duration: 2.5 }
+    { time: 0.8, text: "You know it's true", duration: 2.2 },
+    { time: 3.8, text: "Yeah i miss you", duration: 2.4 },
+    { time: 7.0, text: "You know it's true", duration: 2.5 },
+    { time: 10.2, text: "So, What if i call?", duration: 2.4 },
+    { time: 13.2, text: "And you pick up the phone", duration: 2.8 },
+    { time: 16.5, text: "And i use this holiday", duration: 2.2 },
+    { time: 19.2, text: "To make my way to your ghost", duration: 3.5 },
+    { time: 23.2, text: "Oh, what if you're lonely?", duration: 2.8 },
+    { time: 26.5, text: "You know i am too", duration: 2.5 },
+    { time: 29.5, text: "And i get the chance to say", duration: 2.8 },
+    { time: 32.8, text: "Merry Christmas i miss you", duration: 3.8 },
+    { time: 37.2, text: "I MISS YOU", duration: 3.2 }
 ];
 
 let activeLyricIndex = -1;
 let charInterval = null;
 
+function resetToIdleState() {
+    if (charInterval) clearInterval(charInterval);
+    lyricsTextEl.textContent = '';
+    cursorEl.style.display = 'inline-block';
+    activeLyricIndex = -1;
+}
+
 function updateLyricsOnTimeUpdate() {
     if (!isPlaying) return;
     const currentTime = bgAudio.currentTime;
     
-    // Find current active lyric based on audio playback position
+    // Find active lyric for current playback timestamp
     let newIndex = -1;
     for (let i = timedLyrics.length - 1; i >= 0; i--) {
         if (currentTime >= timedLyrics[i].time) {
-            newIndex = i;
+            if (currentTime <= timedLyrics[i].time + timedLyrics[i].duration + 1.2) {
+                newIndex = i;
+            }
             break;
         }
     }
 
-    if (newIndex !== activeLyricIndex && newIndex !== -1) {
+    if (newIndex !== activeLyricIndex) {
         activeLyricIndex = newIndex;
-        renderLyricItem(timedLyrics[newIndex]);
+        if (newIndex !== -1) {
+            renderLyricItem(timedLyrics[newIndex]);
+        } else {
+            resetToIdleState();
+        }
     }
 }
 
 function renderLyricItem(item) {
     if (charInterval) clearInterval(charInterval);
     lyricsTextEl.textContent = '';
-    cursorEl.style.display = 'inline';
+    cursorEl.style.display = 'inline-block';
 
     let charIdx = 0;
-    const charDelay = (item.duration / item.text.length) * 1000 * 0.7; // Typewriter speed relative to phrase duration
+    const charDelay = (item.duration * 1000) / item.text.length;
 
     charInterval = setInterval(() => {
         if (charIdx < item.text.length) {
@@ -187,7 +200,7 @@ function togglePlay() {
         pauseSvg.classList.remove('hidden');
         musicCard.classList.add('playing');
         
-        if (!bgAudio.src || bgAudio.src.includes('music.mp3') === false) {
+        if (!bgAudio.src || bgAudio.src === '') {
             bgAudio.src = 'music.mp3';
         }
         
@@ -203,7 +216,7 @@ function togglePlay() {
         musicCard.classList.remove('playing');
         songStatus.textContent = 'Di-pause (Klik untuk lanjut)';
         bgAudio.pause();
-        if (charInterval) clearInterval(charInterval);
+        resetToIdleState();
     }
 }
 
@@ -214,19 +227,21 @@ bgAudio.addEventListener('ended', () => {
     pauseSvg.classList.add('hidden');
     musicCard.classList.remove('playing');
     songStatus.textContent = 'Selesai diputar';
-    activeLyricIndex = -1;
+    resetToIdleState();
 });
 
 playBtn.addEventListener('click', togglePlay);
 
 replayBtn.addEventListener('click', () => {
     bgAudio.currentTime = 0;
-    activeLyricIndex = -1;
-    lyricsTextEl.textContent = '';
+    resetToIdleState();
     if (!isPlaying) {
         togglePlay();
     } else {
         bgAudio.play();
     }
 });
+
+// Set initial state: Empty text with blinking cursor line
+resetToIdleState();
 
