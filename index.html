@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas I Miss You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Canvas for Stars & Snow Particles -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Overlay Vignette and Blur -->
+    <div class="overlay"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header / Decorative Element -->
+        <div class="header-badge">
+            <span class="badge-icon">🎄</span>
+            <span class="badge-text">Christmas Edition</span>
+        </div>
+
+        <!-- Music Control Widget -->
+        <div class="music-card" id="musicCard">
+            <div class="music-info">
+                <div class="music-icon" id="musicIcon">🎵</div>
+                <div class="music-text">
+                    <span class="song-title">Merry Christmas I Miss You</span>
+                    <span class="song-status" id="songStatus">Klik untuk memutar musik</span>
+                </div>
+            </div>
+            <button class="play-btn" id="playBtn" aria-label="Play Music">
+                <svg id="playSvg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <svg id="pauseSvg" class="hidden" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Lyrics Display Box -->
+        <div class="lyrics-wrapper">
+            <div class="lyrics-container">
+                <h1 class="lyrics-text" id="lyricsText"></h1>
+                <span class="cursor" id="cursor">|</span>
+            </div>
+        </div>
+
+        <!-- Interactive Replay / Heart Action -->
+        <div class="action-footer">
+            <button class="action-btn" id="replayBtn">
+                <span class="btn-icon">✨</span>
+                <span>Putar Ulang Lirik</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio Player (Optional background music if user embeds track) -->
+    <!-- You can place an audio file named 'music.mp3' in the root directory if desired -->
+    <audio id="bgAudio" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
