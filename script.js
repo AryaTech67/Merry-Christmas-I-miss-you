@@ -123,20 +123,20 @@ function animateParticles() {
 }
 animateParticles();
 
-// Lyrics data with timestamp (in seconds) matching Alex Crichton - Merry Christmas I miss you
+// Lyrics data with precise timestamps (in seconds) matching audio track
 const timedLyrics = [
-    { time: 0.5, text: "You know it's true", duration: 2.2 },
-    { time: 3.0, text: "Yeah i miss you", duration: 2.8 },
-    { time: 6.2, text: "You know it's true", duration: 2.8 },
-    { time: 9.3, text: "So, What if i call?", duration: 2.5 },
-    { time: 12.0, text: "And you pick up the phone", duration: 2.6 },
-    { time: 14.8, text: "And i use this holiday", duration: 2.0 },
-    { time: 17.0, text: "To make my way to your ghost", duration: 3.2 },
-    { time: 20.5, text: "Oh, what if you're lonely?", duration: 2.7 },
-    { time: 23.5, text: "You know i am too", duration: 2.5 },
-    { time: 26.2, text: "And i get the chance to say", duration: 2.5 },
-    { time: 29.0, text: "Merry Christmas i miss you", duration: 3.5 },
-    { time: 33.0, text: "I MISS YOU", duration: 3.0 }
+    { time: 0.1, text: "You know it's true", duration: 1.8 },
+    { time: 2.2, text: "Yeah i miss you", duration: 2.2 },
+    { time: 4.8, text: "You know it's true", duration: 2.2 },
+    { time: 7.2, text: "So, What if i call?", duration: 2.2 },
+    { time: 9.8, text: "And you pick up the phone", duration: 2.2 },
+    { time: 12.2, text: "And i use this holiday", duration: 1.8 },
+    { time: 14.2, text: "To make my way to your ghost", duration: 2.8 },
+    { time: 17.2, text: "Oh, what if you're lonely?", duration: 2.2 },
+    { time: 19.8, text: "You know i am too", duration: 2.0 },
+    { time: 22.0, text: "And i get the chance to say", duration: 2.2 },
+    { time: 24.5, text: "Merry Christmas i miss you", duration: 3.0 },
+    { time: 28.0, text: "I MISS YOU", duration: 2.5 }
 ];
 
 let activeLyricIndex = -1;
