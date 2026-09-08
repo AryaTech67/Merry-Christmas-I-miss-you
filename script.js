@@ -165,15 +165,18 @@ function togglePlay() {
         playSvg.classList.add('hidden');
         pauseSvg.classList.remove('hidden');
         musicCard.classList.add('playing');
-        if (!bgAudio.src || bgAudio.src === '') {
-            bgAudio.src = 'music.mp3';
+        
+        bgAudio.src = 'music.mp3?v=' + Date.now();
+        bgAudio.load();
+        const playPromise = bgAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                songStatus.textContent = 'Memutar musik & lirik...';
+            }).catch((err) => {
+                console.log('Audio playback error:', err);
+                songStatus.textContent = 'Klik tombol play lagi untuk memutar';
+            });
         }
-        bgAudio.play().then(() => {
-            songStatus.textContent = 'Memutar musik & lirik...';
-        }).catch((err) => {
-            console.log('Audio playback error:', err);
-            songStatus.textContent = 'Klik tombol play lagi untuk memutar';
-        });
     } else {
         playSvg.classList.remove('hidden');
         pauseSvg.classList.add('hidden');
